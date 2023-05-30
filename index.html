@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Connect Issue Tracker</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #0a2c58;
+      color: #000000;
+    }
+
+    .form-container {
+      max-width: 500px;
+      margin: 50px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-container">
+      <h2>SMART ISSUE TRACKER</h2>
+      <form id="dataForm">
+        <div class="form-group">
+          <label for="issueTitle">Issue Title</label>
+          <input type="text" class="form-control" id="issueTitle" required>
+        </div>
+        <div class="form-group">
+          <label for="incidentType">Incident Type</label>
+          <select class="form-control" id="incidentType" required>
+            <option value="s1">S1</option>
+            <option value="s2">S2</option>
+            <option value="s3">S3</option>
+            <option value="s4">S4</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="incidentNumber">Incident Number</label>
+          <input type="text" class="form-control" id="incidentNumber" required>
+        </div>
+        <div class="form-group">
+          <label for="startDateTime">Issue Start DateTime</label>
+          <input type="datetime-local" class="form-control" id="startDateTime" required>
+        </div>
+        <div class="form-group">
+          <label for="endDateTime">Issue End DateTime</label>
+          <input type="datetime-local" class="form-control" id="endDateTime" required>
+        </div>
+        <div class="form-group">
+          <label for="relatedTeam">Issue Related Team</label>
+          <select class="form-control" id="relatedTeam" required>
+            <option value="CPOS">CPOS</option>
+            <option value="EAI">EAI</option>
+            <option value="Middleware">Middleware</option>
+            <option value="Unix">Unix</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="shiftPersons">Shift Persons</label>
+          <input type="text" class="form-control" id="shiftPersons" required>
+        </div>
+        <div class="form-group">
+          <label for="issueResolution">Issue Resolution</label>
+          <textarea class="form-control" id="issueResolution" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+  <script>
+    $(document).ready(function() {
+      $("#dataForm").submit(function(event) {
+        event.preventDefault();
+
+        // Get form data
+        const issueTitle = $("#issueTitle").val();
+        const incidentType = $("#incidentType").val();
+        const incidentNumber = $("#incidentNumber").val();
+        const startDateTime = $("#startDateTime").val();
+        const endDateTime = $("#endDateTime").val();
+        const relatedTeam = $("#relatedTeam").val();
+        const shiftPersons = $("#shiftPersons").val();
+        const issueResolution = $("#issueResolution").val();
+
+        // Send form data to backend
+        $.ajax({
+          url: "backend.php",
+          method: "POST",
+          data: {
+            issueTitle: issueTitle,
+            incidentType: incidentType,
+            incidentNumber: incidentNumber,
+            startDateTime: startDateTime,
+            endDateTime: endDateTime,
+            relatedTeam: relatedTeam,
+            shiftPersons: shiftPersons,
+            issueResolution: issueResolution
+          },
+          success: function(response) {
+            // Show success message
+            Swal.fire({
+              title: "Success!",
+              text: "Data has been submitted successfully.",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+
+            // Reset the form
+            $("#dataForm")[0].reset();
+          },
+          error: function() {
+            // Show error message
+            Swal.fire({
+              title: "Error!",
+              text: "An error occurred while submitting the data.",
+              icon: "error",
+              confirmButtonText: "OK"
+            });
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
